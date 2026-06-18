@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "APP-.YYYY.-.#####",
+ "creation": "2026-06-16 13:05:54.770720",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "full_name",
+  "email",
+  "document_bundle",
+  "status",
+  "submission_token",
+  "portal_url",
+  "submitted_documents",
+  "notes",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "options": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "document_bundle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Document Bundle",
+   "options": "Document Bundle",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nPending Documents\nDocuments Complete\nApproved\nRejected"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "submission_token",
+   "fieldtype": "Data",
+   "label": "Submission Token",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "portal_url",
+   "fieldtype": "Data",
+   "label": "Portal Link",
+   "read_only": 1,
+   "description": "Send this link to the candidate to upload their documents"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "submitted_documents",
+   "fieldtype": "Table",
+   "label": "Submitted Documents",
+   "options": "Candidate Document Submission"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Candidate Application",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-06-16 14:31:47.303571",
+ "modified_by": "Administrator",
+ "module": "OCR Validator",
+ "name": "Candidate Application",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "full_name"
+}

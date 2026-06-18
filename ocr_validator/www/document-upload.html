@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CCI Global — Document Submission Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+:root{
+  --navy:#050b34;--navy-mid:#0a1560;--blue-deep:#030772;
+  --steel:#6786ac;--teal:#4d9b9b;--orange:#ea781b;
+  --light-blue:#92b3d9;--gray:#b8b8b8;--white:#ffffff;
+  --surface:#f2f3f6;--card-bg:#ffffff;
+  --border:rgba(5,11,52,0.10);--border-strong:rgba(5,11,52,0.22);
+  --success:#22c55e;--success-bg:#dcfce7;--success-text:#15803d;
+  --danger:#ef4444;--danger-bg:#fee2e2;--danger-text:#dc2626;
+  --warn:#f59e0b;--warn-bg:#fef3c7;--warn-text:#92400e;
+}
+/* ── DARK MODE VARIABLES ── */
+[data-theme="dark"]{
+  --surface:#0d1117;--card-bg:#161b22;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--navy);min-height:100vh;display:flex;flex-direction:column;transition:background .25s,color .25s}
+/* Dark mode overrides */
+[data-theme="dark"] body{color:#e6edf3}
+[data-theme="dark"] .topbar{background:#0d1117}
+[data-theme="dark"] .page-header{background:#0d1117}
+[data-theme="dark"] .card{background:#161b22;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .card-header{background:#1a2030;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .card-title{color:#e6edf3}
+[data-theme="dark"] .card-subtitle{color:#92b3d9}
+[data-theme="dark"] .doc-item{background:#161b22;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .doc-item.status-failed{background:#2a1515}
+[data-theme="dark"] .doc-item.status-pending{background:#1e1a0f}
+[data-theme="dark"] .doc-name{color:#e6edf3}
+[data-theme="dark"] .doc-hint{color:#92b3d9}
+[data-theme="dark"] .form-select{background:#1a2030;color:#e6edf3;border-color:rgba(255,255,255,0.18)}
+[data-theme="dark"] .drop-zone{background:#1a2030;border-color:#3d5080}
+[data-theme="dark"] .drop-zone:hover{background:#1e2535;border-color:var(--orange)}
+[data-theme="dark"] .drop-title{color:#e6edf3}
+[data-theme="dark"] .drop-formats{color:#92b3d9}
+[data-theme="dark"] .uploaded-item{background:#161b22;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .uploaded-item:hover{background:#1a2030}
+[data-theme="dark"] .uploaded-doc-name{color:#e6edf3}
+[data-theme="dark"] .uploaded-doc-date{color:#92b3d9}
+[data-theme="dark"] .file-thumb{background:#1a2030;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .footer{background:#161b22;border-color:rgba(255,255,255,0.08);color:#92b3d9}
+[data-theme="dark"] .footer-links a{color:#92b3d9}
+[data-theme="dark"] .profile-dropdown{background:#161b22;border-color:rgba(255,255,255,0.18)}
+[data-theme="dark"] .pd-row{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pd-row-val{color:#e6edf3}
+[data-theme="dark"] .pd-row-label{color:#92b3d9}
+[data-theme="dark"] .pd-section-title{color:#92b3d9;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pd-footer{background:#0d1117;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pd-btn.outline{color:#e6edf3;border-color:rgba(255,255,255,0.18)}
+[data-theme="dark"] .pd-btn.outline:hover{background:#1a2030}
+[data-theme="dark"] .modal{background:#161b22}
+[data-theme="dark"] .modal-header{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .modal-title{color:#e6edf3}
+[data-theme="dark"] .modal-footer{background:#161b22;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pm-section-hd{background:#1a2030;color:#92b3d9}
+[data-theme="dark"] .pm-field{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pm-field-val{color:#e6edf3}
+[data-theme="dark"] .pm-field-label{color:#92b3d9}
+[data-theme="dark"] .pm-kyc-card{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pm-kyc-step-name{color:#e6edf3}
+[data-theme="dark"] .pm-kyc-step-state{color:#92b3d9}
+[data-theme="dark"] .count-badge.navy{background:#263354;color:#e6edf3}
+[data-theme="dark"] .count-badge.steel{background:rgba(103,134,172,0.2);color:#92b3d9}
+[data-theme="dark"] .btn-secondary{color:#e6edf3;border-color:rgba(255,255,255,0.18)}
+[data-theme="dark"] .btn-secondary:hover{background:#1a2030}
+[data-theme="dark"] .icon-btn{color:#92b3d9;border-color:rgba(255,255,255,0.15)}
+[data-theme="dark"] .icon-btn:hover{background:#1a2030;color:#e6edf3}
+[data-theme="dark"] .file-preview{background:#1a2335;border-color:#3d6080}
+[data-theme="dark"] .file-preview-name{color:#e6edf3}
+[data-theme="dark"] .progress-strip{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .upload-body .form-label{color:#92b3d9}
+/* Theme toggle button */
+.theme-toggle{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#e6edf3;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .2s;flex-shrink:0}
+.theme-toggle:hover{background:rgba(255,255,255,0.18);transform:rotate(20deg)}
+/* TOPBAR */
+.topbar{background:var(--navy);height:60px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--orange);position:sticky;top:0;z-index:200;flex-shrink:0}
+.logo-lockup{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-bars{display:flex;flex-direction:column;gap:4px}
+.logo-bar{width:22px;height:3.5px;background:var(--gray)}
+.logo-cci{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;color:var(--gray);letter-spacing:3px;display:block}
+.logo-global{font-family:'Rajdhani',sans-serif;font-size:10px;color:var(--steel);letter-spacing:4px;display:block}
+.logo-tagline{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:2px;border-left:1px solid rgba(255,255,255,0.15);padding-left:10px;margin-left:4px;text-transform:uppercase;line-height:1.4}
+.nav-right{display:flex;align-items:center;gap:14px;position:relative}
+.btn-dash{background:transparent;border:1px solid var(--orange);color:var(--orange);font-family:'Rajdhani',sans-serif;font-weight:600;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.15s}
+.btn-dash:hover{background:rgba(234,120,27,0.1)}
+.user-chip{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 10px 4px 4px;border:1px solid rgba(103,134,172,0.3);border-radius:30px;transition:border-color 0.15s;position:relative}
+.user-chip:hover{border-color:var(--steel)}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--blue-deep);border:1.5px solid var(--steel);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--white);flex-shrink:0}
+.user-info{line-height:1.3}
+.user-name{font-size:13px;font-weight:500;color:var(--white)}
+.user-role{font-size:10px;color:var(--steel)}
+.user-caret{font-size:12px;color:var(--steel);margin-left:2px;transition:transform 0.2s}
+.user-chip.open .user-caret{transform:rotate(180deg)}
+/* Profile dropdown */
+.profile-dropdown{display:none;position:absolute;top:calc(100% + 10px);right:0;width:320px;background:var(--white);border:1px solid var(--border-strong);border-radius:6px;box-shadow:0 8px 32px rgba(5,11,52,0.18);z-index:300;overflow:hidden}
+.profile-dropdown.open{display:block}
+.pd-header{background:var(--navy);padding:20px;display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--orange)}
+.pd-avatar-lg{width:54px;height:54px;border-radius:50%;background:var(--blue-deep);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--white);flex-shrink:0}
+.pd-name{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--white);letter-spacing:0.5px}
+.pd-role-tag{display:inline-block;margin-top:6px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(234,120,27,0.15);color:var(--orange);padding:2px 8px;border:1px solid rgba(234,120,27,0.3)}
+.pd-body{padding:0}
+.pd-section-title{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--steel);padding:10px 16px 4px;border-bottom:1px solid var(--border)}
+.pd-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px}
+.pd-row:last-child{border-bottom:none}
+.pd-row-icon{width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.pd-row-icon.navy{background:rgba(5,11,52,0.08);color:var(--navy)}
+.pd-row-icon.orange{background:rgba(234,120,27,0.1);color:var(--orange)}
+.pd-row-icon.teal{background:rgba(77,155,155,0.1);color:var(--teal)}
+.pd-row-icon.green{background:var(--success-bg);color:var(--success-text)}
+.pd-row-label{color:var(--steel);font-size:11px;min-width:80px}
+.pd-row-val{color:var(--navy);font-weight:500;flex:1}
+.pd-row-badge{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:2px 8px}
+.pd-row-badge.green{background:var(--success-bg);color:var(--success-text)}
+.pd-row-badge.orange{background:rgba(234,120,27,0.12);color:var(--orange)}
+.pd-footer{padding:10px 16px;display:flex;gap:8px;border-top:1px solid var(--border);background:#fafbff}
+.pd-btn{flex:1;padding:8px;border-radius:3px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background 0.12s}
+.pd-btn.outline{background:transparent;border:1px solid var(--border-strong);color:var(--navy)}
+.pd-btn.outline:hover{background:var(--surface)}
+.pd-btn.filled{background:var(--navy);border:1px solid var(--navy);color:white}
+.pd-btn.filled:hover{background:var(--navy-mid)}
+</style>
+<style>
+/* PAGE HEADER */
+.page-header{background:var(--navy);padding:28px 32px 0}
+.page-heading{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--white);letter-spacing:1.5px}
+.page-sub{font-size:13px;color:var(--steel);margin-top:4px}
+.steps-row{display:flex;align-items:center;margin-top:24px}
+.step{display:flex;align-items:center;gap:10px}
+.step-bubble{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;flex-shrink:0}
+.step.done .step-bubble{background:var(--success);color:white}
+.step.active .step-bubble{background:var(--orange);color:white}
+.step.idle .step-bubble{background:rgba(255,255,255,0.08);color:var(--steel);border:1px solid rgba(103,134,172,0.5)}
+.step-text .step-label{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.5px}
+.step-text .step-state{font-size:10px;margin-top:1px}
+.step.done .step-label{color:var(--success)}.step.done .step-state{color:#86efac}
+.step.active .step-label{color:var(--orange)}.step.active .step-state{color:#fdba74}
+.step.idle .step-label{color:var(--light-blue)}.step.idle .step-state{color:rgba(146,179,217,0.75)}
+.step-line{flex:1;height:1px;margin:0 14px;min-width:30px}
+.step-line.done{background:var(--success)}
+.step-line.active{background:linear-gradient(90deg,var(--success),var(--orange))}
+.step-line.idle{background:rgba(255,255,255,0.12)}
+.progress-strip{margin-top:20px;padding:8px 0;display:flex;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,0.06)}
+.progress-track{flex:1;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);width:0%;transition:width 0.4s ease}
+.progress-label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;color:var(--orange);white-space:nowrap}
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;padding:24px 32px;flex:1}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr}.page-header{padding:20px 16px 0}.topbar{padding:0 16px}.main-grid{padding:16px}}
+/* CARD */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.card-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.card-header-left{display:flex;align-items:center;gap:12px}
+.card-icon{width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.card-icon.navy{background:var(--navy);color:white}
+.card-icon.orange{background:var(--orange);color:white}
+.card-icon.success{background:var(--success-bg);color:var(--success-text)}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--navy);letter-spacing:0.8px;text-transform:uppercase}
+.card-subtitle{font-size:11px;color:var(--steel);margin-top:2px}
+.count-badge{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:3px 10px;border-radius:2px}
+.count-badge.navy{background:var(--navy);color:white}
+.count-badge.steel{background:rgba(103,134,172,0.15);color:var(--steel);border:1px solid rgba(103,134,172,0.3)}
+/* DOC LIST */
+.doc-item{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;transition:background 0.12s}
+.doc-item:last-of-type{border-bottom:none}
+.doc-item.status-failed{background:#fff8f8}
+.doc-item.status-pending{background:#fffdf7}
+.doc-type-icon{width:38px;height:38px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:1px}
+.doc-type-icon.id-icon{background:#eef3fb;color:var(--blue-deep)}
+.doc-type-icon.address-icon{background:#f0faf9;color:var(--teal)}
+.doc-type-icon.passport-icon{background:#fff4e8;color:var(--orange)}
+.doc-type-icon.license-icon{background:#f5f0fb;color:#7c3aed}
+.doc-type-icon.default-icon{background:var(--surface);color:var(--steel)}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:13px;font-weight:600;color:var(--navy)}
+.doc-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:5px}
+.doc-region{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.8px;background:var(--navy);color:white;padding:1px 7px}
+.doc-required{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.8px;color:var(--danger);text-transform:uppercase}
+.doc-hint{font-size:11px;color:var(--steel);margin-top:4px;line-height:1.4}
+.doc-status-badge{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;padding:3px 10px;flex-shrink:0;align-self:center;white-space:nowrap}
+.doc-status-badge.verified{background:var(--success-bg);color:var(--success-text);border:1px solid #bbf7d0}
+.doc-status-badge.failed{background:var(--danger-bg);color:var(--danger-text);border:1px solid #fecaca}
+.doc-status-badge.pending{background:var(--warn-bg);color:var(--warn-text);border:1px solid #fde68a}
+/* RIGHT COL */
+.right-col{display:flex;flex-direction:column;gap:20px}
+.upload-body{padding:0 18px}
+.form-group{margin-top:16px}
+.form-label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--steel);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px}
+.form-select{width:100%;padding:10px 14px;border:1px solid var(--border-strong);background:var(--surface);font-size:13px;color:var(--navy);font-family:'Inter',sans-serif;border-radius:2px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23050b34'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;transition:border-color 0.12s}
+.form-select:focus{outline:none;border-color:var(--orange)}
+.drop-zone{margin-top:14px;border:1.5px dashed var(--steel);border-radius:4px;padding:36px 24px;text-align:center;background:#f7f8fd;cursor:pointer;transition:border-color 0.15s,background 0.15s;position:relative}
+.drop-zone.dragging,.drop-zone:hover{border-color:var(--orange);background:#fff9f4}
+.drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-upload-icon{font-size:34px;color:var(--steel);margin-bottom:10px;display:block}
+.drop-title{font-size:14px;font-weight:500;color:var(--navy);margin-bottom:6px}
+.drop-formats{font-size:11px;color:var(--steel)}
+.btn-browse{margin-top:14px;background:var(--orange);color:white;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background 0.15s}
+.btn-browse:hover{background:#d46c12}
+.drop-or{font-size:11px;color:var(--steel);margin-top:8px}
+.file-preview{display:none;margin-top:12px;padding:10px 14px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:4px;align-items:center;gap:10px}
+.file-preview.visible{display:flex}
+.file-preview-name{font-size:13px;font-weight:500;color:var(--navy);flex:1}
+.file-preview-size{font-size:11px;color:var(--steel)}
+.file-remove{background:transparent;border:none;color:var(--danger);cursor:pointer;font-size:16px;line-height:1}
+.btn-submit{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:16px;margin-bottom:18px;background:var(--navy);color:white;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background 0.15s}
+.btn-submit:hover:not(:disabled){background:var(--navy-mid)}
+.btn-submit:disabled{background:var(--gray);cursor:not-allowed}
+.toast{display:none;margin-top:12px;padding:12px 16px;border-radius:4px;font-size:13px;font-weight:500;align-items:center;gap:10px}
+.toast.visible{display:flex}
+.toast.success{background:var(--success-bg);color:var(--success-text);border:1px solid #bbf7d0}
+.toast.error{background:var(--danger-bg);color:var(--danger-text);border:1px solid #fecaca}
+.toast.loading{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}
+/* UPLOADED LIST */
+.uploaded-item{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;transition:background 0.12s}
+.uploaded-item:last-child{border-bottom:none}
+.uploaded-item:hover{background:#f9fafe}
+.file-thumb{width:40px;height:40px;border-radius:4px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--steel);flex-shrink:0}
+.uploaded-info{flex:1;min-width:0}
+.uploaded-doc-name{font-size:13px;font-weight:500;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.uploaded-doc-date{font-size:11px;color:var(--steel);margin-top:3px}
+.uploaded-doc-rules{font-size:11px;font-weight:600;margin-top:4px}
+.rules-ok{color:var(--success-text)}.rules-fail{color:var(--danger-text)}
+.uploaded-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.icon-btn{width:30px;height:30px;border:1px solid var(--border-strong);background:transparent;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--steel);cursor:pointer;transition:background 0.12s,color 0.12s}
+.icon-btn:hover{background:var(--surface);color:var(--navy)}
+.icon-btn.danger:hover{background:var(--danger-bg);color:var(--danger-text);border-color:#fecaca}
+.empty-state{padding:36px 20px;text-align:center}
+.empty-state .empty-icon{font-size:32px;color:var(--gray);margin-bottom:10px}
+.empty-state p{font-size:13px;color:var(--steel)}
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(5,11,52,0.88);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:82vh;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
+.lightbox-close{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 20px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.lightbox-close:hover{background:rgba(255,255,255,0.18)}
+/* FOOTER */
+.footer{background:white;border-top:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--steel);flex-shrink:0}
+.footer-links{display:flex;gap:18px}
+.footer-links a{color:var(--steel);text-decoration:none;transition:color 0.12s}
+.footer-links a:hover{color:var(--navy)}
+/* PROFILE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(5,11,52,0.55);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:white;width:560px;max-width:95vw;border-radius:4px;border-top:3px solid var(--orange);overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
+.modal-header{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--navy);letter-spacing:0.5px;display:flex;align-items:center;gap:8px}
+.modal-close{background:transparent;border:none;font-size:20px;color:var(--steel);cursor:pointer;line-height:1}
+.modal-body{padding:0;overflow-y:auto;flex:1}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0}
+.btn-secondary{border:1px solid var(--border-strong);background:transparent;color:var(--navy);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:background 0.12s}
+.btn-secondary:hover{background:var(--surface)}
+.pm-hero{background:var(--navy);padding:24px 24px 20px;display:flex;align-items:center;gap:18px;border-bottom:2px solid var(--orange)}
+.pm-avatar{width:64px;height:64px;border-radius:50%;background:var(--blue-deep);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:white;flex-shrink:0}
+.pm-hero-name{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:white;letter-spacing:0.5px}
+.pm-hero-email{font-size:12px;color:var(--steel);margin-top:3px}
+.pm-hero-tags{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pm-tag{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px}
+.pm-tag.orange{background:rgba(234,120,27,0.2);color:var(--orange);border:1px solid rgba(234,120,27,0.35)}
+.pm-tag.teal{background:rgba(77,155,155,0.2);color:var(--teal);border:1px solid rgba(77,155,155,0.35)}
+.pm-tag.steel{background:rgba(103,134,172,0.15);color:var(--steel);border:1px solid rgba(103,134,172,0.3)}
+.pm-section{border-bottom:1px solid var(--border)}
+.pm-section-hd{padding:12px 20px 8px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--steel);background:#fafbff}
+.pm-field{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--border)}
+.pm-field:last-child{border-bottom:none}
+.pm-field-icon{width:30px;height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.pm-field-icon.navy{background:rgba(5,11,52,0.07);color:var(--navy)}
+.pm-field-icon.orange{background:rgba(234,120,27,0.1);color:var(--orange)}
+.pm-field-icon.teal{background:rgba(77,155,155,0.1);color:var(--teal)}
+.pm-field-icon.steel{background:rgba(103,134,172,0.1);color:var(--steel)}
+.pm-field-label{font-size:11px;color:var(--steel);min-width:110px}
+.pm-field-val{font-size:13px;font-weight:500;color:var(--navy);flex:1}
+.pm-badge{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:2px 9px}
+.pm-badge.success{background:var(--success-bg);color:var(--success-text)}
+.pm-badge.warn{background:var(--warn-bg);color:var(--warn-text)}
+.pm-badge.orange{background:rgba(234,120,27,0.1);color:var(--orange)}
+.pm-kyc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 20px}
+.pm-kyc-card{padding:12px;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;gap:10px}
+.pm-kyc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pm-kyc-dot.done{background:var(--success)}
+.pm-kyc-dot.active{background:var(--orange)}
+.pm-kyc-dot.pending{background:var(--gray)}
+.pm-kyc-step-name{font-size:12px;font-weight:500;color:var(--navy)}
+.pm-kyc-step-state{font-size:10px;color:var(--steel);margin-top:1px}
+/* Spinner */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Loading overlay */
+.page-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;min-height:60vh}
+.load-ring{width:44px;height:44px;border:4px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a href="#" class="logo-lockup">
+    <div class="logo-bars"><div class="logo-bar"></div><div class="logo-bar"></div></div>
+    <div><span class="logo-cci">CCI</span><span class="logo-global">GLOBAL</span></div>
+    <div class="logo-tagline">Beyond BPO<br>Beyond Boundaries</div>
+  </a>
+  <div class="nav-right">
+    <button class="btn-dash" onclick="window.location.href='/app/candidate-application'">
+      <i class="ti ti-layout-dashboard"></i>Return to Dashboard
+    </button>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+      <i class="ti ti-moon" id="themeIcon"></i>
+    </button>
+    <div class="user-chip" id="userChip" onclick="toggleProfileDropdown()" tabindex="0" role="button" aria-expanded="false" aria-haspopup="true">
+      <div class="user-avatar" id="topAvatar">…</div>
+      <div class="user-info">
+        <div class="user-name" id="topName">Loading…</div>
+        <div class="user-role">Portal User</div>
+      </div>
+      <i class="ti ti-chevron-down user-caret"></i>
+    </div>
+    <!-- Quick profile dropdown -->
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="pd-header">
+        <div class="pd-avatar-lg" id="pdAvatar">…</div>
+        <div>
+          <div class="pd-name" id="pdName">—</div>
+          <div style="font-size:11px;color:var(--steel)" id="pdCountry">—</div>
+          <div class="pd-role-tag">Portal Candidate</div>
+        </div>
+      </div>
+      <div class="pd-body">
+        <div class="pd-section-title">Application Summary</div>
+        <div class="pd-row">
+          <div class="pd-row-icon navy"><i class="ti ti-file-invoice"></i></div>
+          <span class="pd-row-label">Application</span>
+          <span class="pd-row-val" id="pdAppId">—</span>
+        </div>
+        <div class="pd-row">
+          <div class="pd-row-icon teal"><i class="ti ti-map-pin"></i></div>
+          <span class="pd-row-label">Country</span>
+          <span class="pd-row-val" id="pdCountryVal">—</span>
+        </div>
+        <div class="pd-row">
+          <div class="pd-row-icon orange"><i class="ti ti-clipboard-list"></i></div>
+          <span class="pd-row-label">Bundle</span>
+          <span class="pd-row-val" id="pdBundle">—</span>
+        </div>
+        <div class="pd-section-title">KYC Status</div>
+        <div class="pd-row" id="pdKycRow1">
+          <div class="pd-row-icon green"><i class="ti ti-check"></i></div>
+          <span class="pd-row-label">Documents</span>
+          <span class="pd-row-badge orange" id="pdKycStatus">In Progress</span>
+        </div>
+      </div>
+      <div class="pd-footer">
+        <button class="pd-btn outline" onclick="toggleProfileDropdown()"><i class="ti ti-x"></i> Close</button>
+        <button class="pd-btn filled" onclick="openProfileModal()"><i class="ti ti-user"></i> Full Profile</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header" id="pageHeader" style="display:none">
+  <h1 class="page-heading" id="pageHeading">Document Submission</h1>
+  <p class="page-sub">Please upload all required documents to complete your verification.</p>
+  <div class="steps-row" id="stepsRow"></div>
+  <div class="progress-strip">
+    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 OF 0 DOCUMENTS ACCEPTED</div>
+  </div>
+</header>
+
+<!-- LOADING -->
+<div class="page-loading" id="pageLoading">
+  <div class="load-ring"></div>
+  <p style="font-size:13px;color:var(--steel)">Loading your application…</p>
+</div>
+
+<!-- MAIN -->
+<main class="main-grid" id="mainGrid" style="display:none">
+  <!-- LEFT: Required Docs -->
+  <aside>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon navy"><i class="ti ti-checklist"></i></div>
+          <div>
+            <div class="card-title">Required Documents</div>
+            <div class="card-subtitle" id="reqSubtitle">Documents needed for verification</div>
+          </div>
+        </div>
+        <span class="count-badge navy" id="reqCount">0</span>
+      </div>
+      <div id="requiredDocsList"></div>
+    </div>
+  </aside>
+
+  <!-- RIGHT -->
+  <div class="right-col">
+    <!-- Upload -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon orange"><i class="ti ti-upload"></i></div>
+          <div>
+            <div class="card-title">Upload Documents</div>
+            <div class="card-subtitle">Drag and drop your files here or browse</div>
+          </div>
+        </div>
+      </div>
+      <div class="upload-body">
+        <div class="form-group">
+          <label class="form-label" for="docType">Document type</label>
+          <select class="form-select" id="docType" onchange="onDocTypeChange()">
+            <option value="">— Select document type —</option>
+          </select>
+        </div>
+        <div class="drop-zone" id="dropZone"
+          ondragover="handleDragOver(event)" ondragleave="handleDragLeave()"
+          ondrop="handleDrop(event)">
+          <input type="file" id="fileInput" accept=".jpg,.jpeg,.jfif,.png,.gif,.webp,.bmp,.tiff,.pdf,.doc,.docx" onchange="handleFileSelect(event)"/>
+          <i class="ti ti-cloud-upload drop-upload-icon"></i>
+          <div class="drop-title">Drag &amp; drop your file here</div>
+          <div class="drop-formats">JPG · PNG · PDF · DOC · DOCX · Max 25MB per file</div>
+          <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">
+            <i class="ti ti-folder-open"></i> Browse Files
+          </button>
+          <div class="drop-or">or drag and drop</div>
+        </div>
+        <div class="file-preview" id="filePreview">
+          <i class="ti ti-file" style="font-size:18px;color:var(--steel)"></i>
+          <span class="file-preview-name" id="fileName">—</span>
+          <span class="file-preview-size" id="fileSize"></span>
+          <button class="file-remove" onclick="clearFile()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="toast" id="uploadToast"></div>
+        <button class="btn-submit" id="submitBtn" onclick="runOCR()" disabled>
+          <i class="ti ti-scan"></i>Submit &amp; Run OCR Validation
+        </button>
+      </div>
+    </section>
+
+    <!-- Uploaded -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon success"><i class="ti ti-circle-check"></i></div>
+          <div>
+            <div class="card-title">Uploaded Documents</div>
+            <div class="card-subtitle">Files already uploaded and validated</div>
+          </div>
+        </div>
+        <span class="count-badge steel" id="uploadedCount">0</span>
+      </div>
+      <div id="uploadedDocsList"></div>
+    </section>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span>© 2025 CCI Global. All rights reserved.</span>
+  <nav class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="#">Help Center</a>
+  </nav>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="Document preview"/>
+  <button class="lightbox-close" onclick="closeLightbox()"><i class="ti ti-x"></i> Close</button>
+</div>
+
+<!-- FULL PROFILE MODAL -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title"><i class="ti ti-user-circle"></i>Candidate Profile</span>
+      <button class="modal-close" onclick="closeProfileModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" id="profileModalBody">
+      <!-- filled by JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeProfileModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const token = new URLSearchParams(location.search).get('token') || '';
+let portalData = { outstanding:[], completed:[], full_name:'', bundle_name:'', app_status:'', application_name:'' };
+let candidateCountry = '';
+let availableDocTypes = []; // from OCR Compare filtered by country
+let selectedFile = null;
+let isSubmitting = false;
+
+/* ── API helpers ── */
+async function apiFetch(method, params={}) {
+  params.token = token;
+  const r = await fetch(`/api/method/${method}?${new URLSearchParams(params)}`);
+  const j = await r.json();
+  if (!r.ok || j.exc) { const m = j.exc ? j.exc.split('\n').filter(l=>l.trim()).pop() : (j._server_messages||j.message||'Error '+r.status); throw new Error(String(m).replace(/\[|\]|"/g,'').trim()); }
+  return j.message !== undefined ? j.message : j;
+}
+async function apiPost(method, body) {
+  const fd = new FormData(); fd.append('token', token);
+  for (const [k,v] of Object.entries(body)) fd.append(k, v);
+  const r = await fetch(`/api/method/${method}`, {method:'POST', credentials:'include', body:fd});
+  const j = await r.json();
+  if (!r.ok || j.exc) { const raw = j.exc||j._server_messages||JSON.stringify(j.message)||'Error '+r.status; const m = String(raw).split('\n').filter(l=>l.trim()).pop()||raw; throw new Error(m.replace(/[\[\]"]/g,'').trim()); }
+  return j.message !== undefined ? j.message : j;
+}
+
+/* ── Doc icon map ── */
+function getDocIcon(documentType) {
+  const map = {
+    'National ID':      { cls:'id-icon',      icon:'ti-id' },
+    'Passport':         { cls:'passport-icon', icon:'ti-notebook' },
+    'Proof of Address': { cls:'address-icon',  icon:'ti-home-2' },
+    "Driver's License": { cls:'license-icon',  icon:'ti-steering-wheel' },
+    'Bank Statement':   { cls:'address-icon',  icon:'ti-building-bank' },
+  };
+  return map[documentType] || { cls:'default-icon', icon:'ti-file' };
+}
+
+/* ── INIT ── */
+async function load() {
+  // Set correct theme icon on startup
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const icon = document.getElementById('themeIcon');
+  if (icon) icon.className = currentTheme === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
+  try {
+    portalData = await apiFetch('ocr_validator.api.bundle_portal.get_portal_data');
+    // Get candidate country from completed or outstanding docs
+    const allDocs = [...(portalData.completed||[]), ...(portalData.outstanding||[])];
+    candidateCountry = allDocs.length ? allDocs[0].country : '';
+    // Fetch available doc types for this country from OCR Compare
+    try {
+      const ocrTypes = await apiFetch('ocr_validator.api.bundle_portal.get_available_doc_types', { country: candidateCountry });
+      availableDocTypes = ocrTypes || [];
+    } catch(e) {
+      // fallback: use bundle docs
+      const seen = new Set();
+      availableDocTypes = allDocs.filter(d => { const k=d.document_type+'||'+d.country; if(seen.has(k))return false; seen.add(k); return true; }).map(d => ({ document_type: d.document_type, country: d.country }));
+    }
+    document.getElementById('pageLoading').style.display = 'none';
+    document.getElementById('pageHeader').style.display = '';
+    document.getElementById('mainGrid').style.display = 'grid';
+    renderAll();
+  } catch(e) {
+    document.getElementById('pageLoading').innerHTML = `<div style="text-align:center"><div style="font-size:40px;margin-bottom:12px">⚠️</div><h3 style="color:var(--danger);font-family:Rajdhani,sans-serif;font-size:20px;margin-bottom:6px">Could not load application</h3><p style="font-size:13px;color:var(--steel)">${esc(e.message)}</p></div>`;
+  }
+}
+
+function renderAll() {
+  renderHeader();
+  renderTopbar();
+  populateDropdown();
+  renderRequiredDocs();
+  renderUploadedDocs();
+}
+
+/* ── Header / steps ── */
+function renderHeader() {
+  const d = portalData;
+  document.getElementById('pageHeading').textContent = `Document Submission — ${d.bundle_name||''}`;
+  const allDocs = [...(d.completed||[]), ...(d.outstanding||[])];
+  const total = allDocs.length;
+  const passed = (d.completed||[]).filter(c => c.ocr_status==='Passed'||c.ocr_status==='Skipped').length;
+  const isComplete = d.app_status === 'Documents Complete';
+  const pct = isComplete ? 100 : (total ? Math.round(passed/total*100) : 0);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = isComplete ? 'ALL DOCUMENTS VERIFIED ✓' : `${passed} OF ${total} DOCUMENTS ACCEPTED`;
+
+  // 4 fixed KYC steps
+  const steps = [
+    { label:'Identity', state: passed>=1||isComplete ? 'done' : passed===0&&(d.completed||[]).length>0 ? 'active' : 'active' },
+    { label:'Address',  state: passed>=2||isComplete ? 'done' : passed>=1 ? 'active' : 'idle' },
+    { label:'Review',   state: isComplete ? 'done' : (passed>=total&&total>0) ? 'active' : 'idle' },
+    { label:'Complete', state: isComplete ? 'done' : 'idle' },
+  ];
+  // first step: active if anything uploaded, done if at least 1 verified
+  if (passed===0 && (d.completed||[]).length===0) steps[0].state='active';
+
+  const subText = { done:'Completed', active:'In Progress', idle:'Pending' };
+  let html = '';
+  steps.forEach((s,i) => {
+    const icon = s.state==='done' ? '<i class="ti ti-check"></i>' : (i+1);
+    html += `<div class="step ${s.state}"><div class="step-bubble">${icon}</div><div class="step-text"><div class="step-label">${s.label}</div><div class="step-state">${subText[s.state]}</div></div></div>`;
+    if (i<3) {
+      const lc = s.state==='done' ? 'done' : s.state==='active' ? 'active' : 'idle';
+      html += `<div class="step-line ${lc}"></div>`;
+    }
+  });
+  document.getElementById('stepsRow').innerHTML = html;
+}
+
+/* ── Topbar & quick dropdown ── */
+function renderTopbar() {
+  const d = portalData;
+  const parts = (d.full_name||'').split(' ');
+  const initials = ((parts[0]||'')[0]||'') + ((parts[1]||'')[0]||'');
+  document.getElementById('topAvatar').textContent = initials || 'U';
+  document.getElementById('topName').textContent = d.full_name || 'User';
+  document.getElementById('pdAvatar').textContent = initials || 'U';
+  document.getElementById('pdName').textContent = d.full_name || '—';
+  document.getElementById('pdCountry').textContent = candidateCountry || '—';
+  document.getElementById('pdCountryVal').textContent = candidateCountry || '—';
+  document.getElementById('pdAppId').textContent = d.application_name || '—';
+  document.getElementById('pdBundle').textContent = d.bundle_name || '—';
+  const isComplete = d.app_status === 'Documents Complete';
+  const badge = document.getElementById('pdKycStatus');
+  badge.textContent = isComplete ? 'Complete' : 'In Progress';
+  badge.className = 'pd-row-badge ' + (isComplete ? 'green' : 'orange');
+}
+
+/* ── Dropdown from OCR Compare ── */
+function populateDropdown() {
+  const sel = document.getElementById('docType');
+  sel.innerHTML = '<option value="">— Select document type —</option>';
+  // Show all available doc types for candidate's country
+  const seen = new Set();
+  availableDocTypes.forEach(t => {
+    const key = t.document_type + '||' + t.country;
+    if (!seen.has(key)) {
+      seen.add(key);
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = `${t.document_type} — ${t.country}`;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+/* ── Required Docs list ── */
+function renderRequiredDocs() {
+  const d = portalData;
+  const allDocs = [
+    ...(d.completed||[]).map(x=>({...x,_done:true})),
+    ...(d.outstanding||[]).map(x=>({...x,_done:false})),
+  ];
+  // Deduplicate by doc_type+country, keeping latest status
+  const seen = new Map();
+  allDocs.forEach(doc => {
+    const k = doc.document_type+'||'+doc.country;
+    if (!seen.has(k)) seen.set(k, doc);
+  });
+  const docs = Array.from(seen.values());
+  const verified = docs.filter(d => d.ocr_status==='Passed'||d.ocr_status==='Skipped').length;
+  const outstanding = docs.length - verified;
+  document.getElementById('reqCount').textContent = outstanding;
+  document.getElementById('reqSubtitle').textContent = outstanding===0 ? 'All documents verified ✓' : `${outstanding} document${outstanding>1?'s':''} still needed`;
+
+  document.getElementById('requiredDocsList').innerHTML = docs.map(doc => {
+    const passed = doc.ocr_status==='Passed'||doc.ocr_status==='Skipped';
+    const failed = doc.ocr_status==='Failed';
+    const status = passed ? 'verified' : failed ? 'failed' : 'pending';
+    const statusLabel = passed ? '✓ Verified' : failed ? '✗ Failed' : '⏳ Pending';
+    const { cls, icon } = getDocIcon(doc.document_type);
+    return `<div class="doc-item status-${status}">
+      <div class="doc-type-icon ${cls}"><i class="ti ${icon}"></i></div>
+      <div class="doc-info">
+        <div class="doc-name">${esc(doc.document_type)}</div>
+        <div class="doc-meta">
+          <span class="doc-region">${esc(doc.country)}</span>
+          ${doc.is_required ? '<span class="doc-required">Required</span>' : ''}
+        </div>
+        ${doc.description ? `<div class="doc-hint">${esc(doc.description)}</div>` : ''}
+      </div>
+      <span class="doc-status-badge ${status}">${statusLabel}</span>
+    </div>`;
+  }).join('') || '<div class="empty-state"><p>No documents in bundle.</p></div>';
+}
+
+/* ── Uploaded docs list ── */
+function renderUploadedDocs() {
+  const completed = portalData.completed || [];
+  document.getElementById('uploadedCount').textContent = completed.length;
+  if (!completed.length) {
+    document.getElementById('uploadedDocsList').innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-inbox"></i></div><p>No documents uploaded yet.</p></div>`;
+    return;
+  }
+  document.getElementById('uploadedDocsList').innerHTML = completed.map((doc,idx) => {
+    const passed = doc.ocr_status==='Passed'||doc.ocr_status==='Skipped';
+    const { icon } = getDocIcon(doc.document_type);
+    const badge = passed ? '✓ Verified' : '✗ Failed';
+    const rulesClass = passed ? 'rules-ok' : 'rules-fail';
+    return `<div class="uploaded-item">
+      <div class="file-thumb"><i class="ti ${icon}"></i></div>
+      <div class="uploaded-info">
+        <div class="uploaded-doc-name">${esc(doc.document_type)} — ${esc(doc.country)}</div>
+        <div class="uploaded-doc-date">Uploaded on ${(doc.uploaded_at||'—').split('.')[0]}</div>
+        ${doc.ocr_result ? `<div class="uploaded-doc-rules ${rulesClass}">${passed?'✓':'⚠'} ${esc(doc.ocr_result)}</div>` : ''}
+      </div>
+      <div class="uploaded-actions">
+        <span class="doc-status-badge ${passed?'verified':'failed'}">${badge}</span>
+        ${doc.file_url ? `<button class="icon-btn" onclick="viewDoc('${esc(doc.file_url)}')" title="View document"><i class="ti ti-eye"></i></button>` : ''}
+        <button class="icon-btn danger" onclick="removeDoc('${esc(doc.document_type)}','${esc(doc.country)}')" title="Remove document"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── View / Remove ── */
+function viewDoc(url) {
+  const ext = url.split('.').pop().toLowerCase();
+  if (['jpg','jpeg','jfif','png','gif','webp','bmp'].includes(ext)) {
+    document.getElementById('lightboxImg').src = url;
+    document.getElementById('lightbox').classList.add('open');
+  } else {
+    window.open(url, '_blank');
+  }
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+async function removeDoc(docType, country) {
+  if (!confirm(`Remove "${docType}" for ${country}? You will need to re-upload it.`)) return;
+  try {
+    await apiPost('ocr_validator.api.bundle_portal.remove_document', { document_type: docType, country });
+    showToast('loading', 'Document removed.');
+    portalData = await apiFetch('ocr_validator.api.bundle_portal.get_portal_data');
+    renderAll();
+  } catch(e) { showToast('error', 'Could not remove: ' + e.message); }
+}
+
+/* ── File handling ── */
+function handleFileSelect(e) { if (e.target.files[0]) setFile(e.target.files[0]); }
+function handleDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('dragging'); }
+function handleDragLeave() { document.getElementById('dropZone').classList.remove('dragging'); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('dropZone').classList.remove('dragging'); if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]); }
+function setFile(file) {
+  if (file.size > 25*1024*1024) { showToast('error','File exceeds 25 MB limit.'); return; }
+  selectedFile = file;
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileSize').textContent = (file.size/1024).toFixed(1)+' KB';
+  document.getElementById('filePreview').classList.add('visible');
+  clearToast(); updateSubmitBtn();
+}
+function clearFile() {
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('filePreview').classList.remove('visible');
+  updateSubmitBtn();
+}
+function onDocTypeChange() { updateSubmitBtn(); }
+function updateSubmitBtn() {
+  document.getElementById('submitBtn').disabled = !(document.getElementById('docType').value && selectedFile) || isSubmitting;
+}
+
+/* ── OCR Submit ── */
+async function runOCR() {
+  if (isSubmitting) return;
+  const val = document.getElementById('docType').value;
+  if (!val || !selectedFile) return;
+  const [document_type, country] = val.split('||');
+  const ext = selectedFile.name.split('.').pop().toLowerCase();
+  isSubmitting = true;
+  const btn = document.getElementById('submitBtn');
+  btn.innerHTML = '<div class="spinner"></div> RUNNING OCR VALIDATION…';
+  btn.disabled = true;
+  showToast('loading', '<i class="ti ti-scan" style="font-size:15px"></i> Uploading and running OCR…');
+  try {
+    const file_b64 = await new Promise((res,rej) => { const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(selectedFile); });
+    const result = await apiPost('ocr_validator.api.bundle_portal.upload_and_validate', { document_type, country, file_b64, file_ext: ext, file_name: selectedFile.name });
+    const passed = result && result.ocr_passed;
+    showToast(passed ? 'success' : 'error',
+      passed ? '<i class="ti ti-circle-check" style="font-size:15px"></i> OCR passed. Document verified.'
+             : '<i class="ti ti-alert-circle" style="font-size:15px"></i> OCR failed. ' + esc(result.ocr_result||'Please upload a clearer document.'));
+    clearFile();
+    document.getElementById('docType').value = '';
+    portalData = await apiFetch('ocr_validator.api.bundle_portal.get_portal_data');
+    renderAll();
+  } catch(e) {
+    showToast('error', 'Upload failed: ' + e.message);
+  } finally {
+    isSubmitting = false;
+    btn.innerHTML = '<i class="ti ti-scan"></i> SUBMIT &amp; RUN OCR VALIDATION';
+    updateSubmitBtn();
+  }
+}
+
+/* ── Toast ── */
+function showToast(type, html) { const t=document.getElementById('uploadToast'); t.className=`toast visible ${type}`; t.innerHTML=html; }
+function clearToast() { const t=document.getElementById('uploadToast'); t.className='toast'; t.innerHTML=''; }
+
+/* ── Profile dropdown ── */
+function toggleProfileDropdown() {
+  const dd=document.getElementById('profileDropdown'), chip=document.getElementById('userChip');
+  const open=dd.classList.toggle('open');
+  chip.classList.toggle('open',open);
+  chip.setAttribute('aria-expanded',open);
+}
+document.addEventListener('click', e => {
+  const chip=document.getElementById('userChip'), dd=document.getElementById('profileDropdown');
+  if (!chip.contains(e.target) && !dd.contains(e.target)) { dd.classList.remove('open'); chip.classList.remove('open'); chip.setAttribute('aria-expanded','false'); }
+});
+
+/* ── Profile modal ── */
+function openProfileModal() {
+  document.getElementById('profileDropdown').classList.remove('open');
+  document.getElementById('userChip').classList.remove('open');
+  const d = portalData;
+  const parts = (d.full_name||'').split(' ');
+  const initials = ((parts[0]||'')[0]||'') + ((parts[1]||'')[0]||'');
+  const allDocs = [...(d.completed||[]),...(d.outstanding||[])];
+  const total = allDocs.length;
+  const passed = (d.completed||[]).filter(c=>c.ocr_status==='Passed'||c.ocr_status==='Skipped').length;
+  const isComplete = d.app_status === 'Documents Complete';
+  const statusBadge = isComplete ? '<span class="pm-badge success">Documents Complete</span>' : '<span class="pm-badge warn">In Progress</span>';
+  const kycSteps = [
+    { name:'Identity', state: passed>=1||isComplete?'done':allDocs.length>0?'active':'pending' },
+    { name:'Address',  state: passed>=2||isComplete?'done':passed>=1?'active':'pending' },
+    { name:'Review',   state: isComplete?'done':(passed>=total&&total>0)?'active':'pending' },
+    { name:'Complete', state: isComplete?'done':'pending' },
+  ];
+  document.getElementById('profileModalBody').innerHTML = `
+    <div class="pm-hero">
+      <div class="pm-avatar">${initials||'U'}</div>
+      <div>
+        <div class="pm-hero-name">${esc(d.full_name||'—')}</div>
+        <div class="pm-hero-email" style="font-size:12px;color:var(--steel);margin-top:3px">${esc(d.application_name||'—')}</div>
+        <div class="pm-hero-tags">
+          <span class="pm-tag orange">Portal Candidate</span>
+          <span class="pm-tag teal">${esc(candidateCountry||'—')}</span>
+          <span class="pm-tag steel">${esc(d.bundle_name||'—')}</span>
+        </div>
+      </div>
+    </div>
+    <div class="pm-section">
+      <div class="pm-section-hd">Application Details</div>
+      <div class="pm-field"><div class="pm-field-icon orange"><i class="ti ti-file-invoice"></i></div><span class="pm-field-label">Application ID</span><span class="pm-field-val">${esc(d.application_name||'—')}</span></div>
+      <div class="pm-field"><div class="pm-field-icon navy"><i class="ti ti-clipboard-list"></i></div><span class="pm-field-label">Doc Bundle</span><span class="pm-field-val">${esc(d.bundle_name||'—')}</span></div>
+      <div class="pm-field"><div class="pm-field-icon teal"><i class="ti ti-map-pin"></i></div><span class="pm-field-label">Country</span><span class="pm-field-val">${esc(candidateCountry||'—')}</span></div>
+      <div class="pm-field"><div class="pm-field-icon orange"><i class="ti ti-clock"></i></div><span class="pm-field-label">Status</span>${statusBadge}</div>
+    </div>
+    <div class="pm-section">
+      <div class="pm-section-hd">KYC Progress</div>
+      <div class="pm-kyc-grid">
+        ${kycSteps.map(s=>`<div class="pm-kyc-card"><div class="pm-kyc-dot ${s.state}"></div><div><div class="pm-kyc-step-name">${s.name}</div><div class="pm-kyc-step-state">${s.state==='done'?'Completed':s.state==='active'?'In Progress':'Pending'}</div></div></div>`).join('')}
+      </div>
+    </div>
+    <div class="pm-section">
+      <div class="pm-section-hd">Document Summary</div>
+      <div class="pm-field"><div class="pm-field-icon navy"><i class="ti ti-files"></i></div><span class="pm-field-label">Total Docs</span><span class="pm-field-val">${total}</span></div>
+      <div class="pm-field"><div class="pm-field-icon steel"><i class="ti ti-circle-check"></i></div><span class="pm-field-label">Verified</span><span class="pm-field-val" style="color:var(--success-text);font-weight:600">${passed}</span></div>
+      <div class="pm-field"><div class="pm-field-icon orange"><i class="ti ti-clock"></i></div><span class="pm-field-label">Pending</span><span class="pm-field-val">${total-passed}</span></div>
+    </div>`;
+  document.getElementById('profileModal').classList.add('open');
+}
+function closeProfileModal() { document.getElementById('profileModal').classList.remove('open'); }
+document.getElementById('profileModal').addEventListener('click', e => { if (e.target===document.getElementById('profileModal')) closeProfileModal(); });
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeProfileModal(); closeLightbox(); } });
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── THEME TOGGLE ──
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  document.getElementById('themeIcon').className = isDark ? 'ti ti-moon' : 'ti ti-sun';
+  localStorage.setItem('cci-theme', newTheme);
+}
+// Apply saved theme on load
+(function() {
+  const saved = localStorage.getItem('cci-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  // icon is set after DOM ready — handled in load()
+})();
+
+load();
+</script>
+</body>
+</html>

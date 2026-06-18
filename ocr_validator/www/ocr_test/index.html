@@ -1,0 +1,12 @@
+{% extends "templates/web.html" %}
+{% block title %}OCR Document Validator | CCI Global{% endblock %}
+{% block head_include %}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+{% block page_content %}
+<script>
+  // Redirect to the main validator page
+  window.location.replace("/ocr-validator");
+</script>
+<p>Redirecting to <a href="/ocr-validator">OCR Validator</a>…</p>
+{% endblock %}

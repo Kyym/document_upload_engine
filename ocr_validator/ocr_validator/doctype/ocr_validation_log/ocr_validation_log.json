@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "autoname": "format:OCRLOG-{YYYY}-{MM}-{##}",
+ "creation": "2026-06-15 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "document_type",
+  "country",
+  "validated_by",
+  "validation_passed",
+  "col_break1",
+  "file_url",
+  "section_rules",
+  "missing_rules",
+  "failed_or_groups",
+  "section_ocr",
+  "ocr_text"
+ ],
+ "fields": [
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Document Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Country",
+   "reqd": 1
+  },
+  {
+   "fieldname": "validated_by",
+   "fieldtype": "Link",
+   "label": "Validated By",
+   "options": "User",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "validation_passed",
+   "fieldtype": "Check",
+   "label": "Validation Passed",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "col_break1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "file_url",
+   "fieldtype": "Data",
+   "label": "File URL"
+  },
+  {
+   "fieldname": "section_rules",
+   "fieldtype": "Section Break",
+   "label": "Rule Results"
+  },
+  {
+   "fieldname": "missing_rules",
+   "fieldtype": "Small Text",
+   "label": "Missing Required Rules"
+  },
+  {
+   "fieldname": "failed_or_groups",
+   "fieldtype": "Small Text",
+   "label": "Failed OR Groups"
+  },
+  {
+   "fieldname": "section_ocr",
+   "fieldtype": "Section Break",
+   "label": "Extracted OCR Text"
+  },
+  {
+   "fieldname": "ocr_text",
+   "fieldtype": "Long Text",
+   "label": "OCR Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-06-15 00:00:00",
+ "modified_by": "Administrator",
+ "module": "OCR Validator",
+ "name": "OCR Validation Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

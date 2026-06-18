@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-06-16 13:05:12.246324",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "document_type",
+  "country",
+  "file_url",
+  "ocr_status",
+  "ocr_result",
+  "uploaded_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Document Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Country",
+   "options": "Country",
+   "reqd": 1
+  },
+  {
+   "fieldname": "file_url",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Uploaded File"
+  },
+  {
+   "fieldname": "ocr_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "OCR Status",
+   "options": "Pending\nPassed\nFailed\nSkipped"
+  },
+  {
+   "fieldname": "ocr_result",
+   "fieldtype": "Small Text",
+   "label": "OCR Result"
+  },
+  {
+   "fieldname": "uploaded_at",
+   "fieldtype": "Datetime",
+   "label": "Uploaded At"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-16 13:05:12.246324",
+ "modified_by": "Administrator",
+ "module": "OCR Validator",
+ "name": "Candidate Document Submission",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,166 @@
+[
+  {
+    "doctype": "OCR Compare",
+    "name": "Passport-Kenya",
+    "document_type": "Passport",
+    "country": "Kenya",
+    "description": "Kenyan machine-readable passport validation rules",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "passport", "description": "Document must identify as a passport" },
+      { "rule_value": "kenya",    "description": "Issuing country must be Kenya" },
+      { "rule_value": "surname",  "description": "Surname field must be present" },
+      { "rule_value": "__FUTURE_DATE__", "description": "Must contain a future expiry date" },
+      { "rule_value": "__REGEX__:[A-Z]{2}[0-9]{7}", "description": "Passport number format: 2 letters + 7 digits" }
+    ],
+    "or_table": [
+      { "group_name": "Name Label", "rule_value": "given name",  "description": "Name field label variation" },
+      { "group_name": "Name Label", "rule_value": "given names", "description": "Name field label variation" },
+      { "group_name": "Name Label", "rule_value": "first name",  "description": "Name field label variation" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "Passport-South Africa",
+    "document_type": "Passport",
+    "country": "South Africa",
+    "description": "South African passport validation rules",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "passport",     "description": "Document must identify as a passport" },
+      { "rule_value": "south africa", "description": "Issuing country must be South Africa" },
+      { "rule_value": "surname",      "description": "Surname field must be present" },
+      { "rule_value": "__FUTURE_DATE__", "description": "Must contain a future expiry date" },
+      { "rule_value": "__REGEX__:[A-Z]{2}[0-9]{7}", "description": "SA passport number format" }
+    ],
+    "or_table": [
+      { "group_name": "Name Label", "rule_value": "given name",  "description": "Name field label variation" },
+      { "group_name": "Name Label", "rule_value": "given names", "description": "Name field label variation" },
+      { "group_name": "Name Label", "rule_value": "names",       "description": "Name field label variation" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "National ID-Kenya",
+    "document_type": "National ID",
+    "country": "Kenya",
+    "description": "Kenyan National Identity Card validation",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "republic of kenya",    "description": "Issuing authority" },
+      { "rule_value": "national identity",    "description": "Document type identifier" },
+      { "rule_value": "id. no",               "description": "ID number label" },
+      { "rule_value": "__REGEX__:\\b\\d{8}\\b", "description": "8-digit national ID number" },
+      { "rule_value": "__HAS_DATE__",         "description": "Must contain a date of birth or issue date" }
+    ],
+    "or_table": [
+      { "group_name": "Name Label", "rule_value": "full name", "description": "Full name field" },
+      { "group_name": "Name Label", "rule_value": "surname",   "description": "Surname field" },
+      { "group_name": "Name Label", "rule_value": "name",      "description": "Generic name field" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "National ID-South Africa",
+    "document_type": "National ID",
+    "country": "South Africa",
+    "description": "South African green barcoded ID / smart card",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "south africa",         "description": "Issuing country" },
+      { "rule_value": "__REGEX__:\\b\\d{13}\\b", "description": "13-digit SA ID number" },
+      { "rule_value": "surname",              "description": "Surname field" },
+      { "rule_value": "__HAS_DATE__",         "description": "Must contain a date" }
+    ],
+    "or_table": [
+      { "group_name": "Name Label", "rule_value": "names",      "description": "Names field" },
+      { "group_name": "Name Label", "rule_value": "first name", "description": "First name field" },
+      { "group_name": "Name Label", "rule_value": "forenames",  "description": "Forenames field" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "Driver's License-Kenya",
+    "document_type": "Driver's License",
+    "country": "Kenya",
+    "description": "Kenyan driving licence validation",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "driving licence",      "description": "Document type identifier" },
+      { "rule_value": "kenya",                "description": "Issuing country" },
+      { "rule_value": "__FUTURE_DATE__",      "description": "Must contain a future expiry date" },
+      { "rule_value": "__HAS_DATE__",         "description": "Issue or birth date must be present" }
+    ],
+    "or_table": [
+      { "group_name": "Licence Class", "rule_value": "class a",  "description": "Motorcycle class" },
+      { "group_name": "Licence Class", "rule_value": "class b",  "description": "Light vehicle class" },
+      { "group_name": "Licence Class", "rule_value": "class c",  "description": "Heavy vehicle class" },
+      { "group_name": "Licence Class", "rule_value": "class d",  "description": "Articulated class" },
+      { "group_name": "Licence Class", "rule_value": "categories", "description": "Generic categories label" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "Driver's License-South Africa",
+    "document_type": "Driver's License",
+    "country": "South Africa",
+    "description": "South African driver's licence card validation",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "south africa",    "description": "Issuing country" },
+      { "rule_value": "__FUTURE_DATE__", "description": "Must contain a future expiry date" },
+      { "rule_value": "licence",         "description": "Document type identifier" },
+      { "rule_value": "__REGEX__:\\b[A-Z0-9]{8,12}\\b", "description": "Licence number format" }
+    ],
+    "or_table": [
+      { "group_name": "Vehicle Code", "rule_value": "code 8",  "description": "Light motor vehicle" },
+      { "group_name": "Vehicle Code", "rule_value": "code 10", "description": "Heavy motor vehicle" },
+      { "group_name": "Vehicle Code", "rule_value": "code 14", "description": "Extra heavy motor vehicle" },
+      { "group_name": "Vehicle Code", "rule_value": "codes",   "description": "Generic codes label" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "Proof of Address-Kenya",
+    "document_type": "Proof of Address",
+    "country": "Kenya",
+    "description": "Utility bill or bank statement proof of address – Kenya",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "__HAS_DATE__",    "description": "Document must contain a date" },
+      { "rule_value": "__RECENT_DATE__", "description": "Date must be within the last 3 months" },
+      { "rule_value": "kenya",           "description": "Must reference Kenya" }
+    ],
+    "or_table": [
+      { "group_name": "Address Label", "rule_value": "address", "description": "Generic address field" },
+      { "group_name": "Address Label", "rule_value": "p.o. box", "description": "PO Box label" },
+      { "group_name": "Address Label", "rule_value": "street",   "description": "Street address label" },
+      { "group_name": "Doc Source",    "rule_value": "kplc",     "description": "Kenya Power utility bill" },
+      { "group_name": "Doc Source",    "rule_value": "nairobi water", "description": "Nairobi Water bill" },
+      { "group_name": "Doc Source",    "rule_value": "bank statement", "description": "Bank statement" },
+      { "group_name": "Doc Source",    "rule_value": "statement of account", "description": "Account statement" }
+    ]
+  },
+  {
+    "doctype": "OCR Compare",
+    "name": "Proof of Address-South Africa",
+    "document_type": "Proof of Address",
+    "country": "South Africa",
+    "description": "Utility bill or bank statement proof of address – South Africa",
+    "enabled": 1,
+    "must_have_table": [
+      { "rule_value": "__HAS_DATE__",    "description": "Document must contain a date" },
+      { "rule_value": "__RECENT_DATE__", "description": "Date must be within the last 3 months" },
+      { "rule_value": "south africa",    "description": "Must reference South Africa" }
+    ],
+    "or_table": [
+      { "group_name": "Address Label", "rule_value": "address", "description": "Generic address field" },
+      { "group_name": "Address Label", "rule_value": "street",  "description": "Street label" },
+      { "group_name": "Address Label", "rule_value": "suburb",  "description": "Suburb label" },
+      { "group_name": "Doc Source",    "rule_value": "eskom",   "description": "Eskom electricity bill" },
+      { "group_name": "Doc Source",    "rule_value": "city of cape town", "description": "CT municipal bill" },
+      { "group_name": "Doc Source",    "rule_value": "city of johannesburg", "description": "JHB municipal bill" },
+      { "group_name": "Doc Source",    "rule_value": "bank statement", "description": "Bank statement" }
+    ]
+  }
+]

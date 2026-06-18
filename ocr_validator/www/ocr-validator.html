@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OCR Document Validator | CCI Global</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand-dark:   #050b34;
+      --brand-mid:    #030772;
+      --brand-accent: #ea781b;
+      --brand-muted:  #6786ac;
+      --brand-light:  #b8c4d8;
+      --success:      #22c87a;
+      --success-bg:   rgba(34,200,122,.10);
+      --success-bdr:  rgba(34,200,122,.35);
+      --danger:       #f04e4e;
+      --danger-bg:    rgba(240,78,78,.10);
+      --danger-bdr:   rgba(240,78,78,.35);
+      --warn:         #f5a623;
+      --card-bg:      rgba(3,7,114,.18);
+      --card-bdr:     rgba(3,7,114,.55);
+      --radius:       12px;
+      --shadow:       0 4px 32px rgba(0,0,0,.45);
+      --transition:   .28s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--brand-dark);
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: linear-gradient(135deg, #050b34 0%, #030d5a 100%);
+      border-bottom: 2px solid var(--brand-accent);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.6);
+    }
+
+    .topbar-brand { display: flex; align-items: center; gap: 14px; }
+    .topbar-logo {
+      width: 36px; height: 36px;
+      background: var(--brand-accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 15px; color: #fff; letter-spacing: 1px;
+    }
+    .topbar-name { font-size: 17px; font-weight: 700; color: #fff; }
+    .topbar-name span { color: var(--brand-accent); }
+    .topbar-sub { font-size: 11px; color: var(--brand-muted); margin-top: -2px; }
+
+    .topbar-nav { display: flex; gap: 8px; }
+    .topbar-nav a {
+      color: var(--brand-light);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .topbar-nav a:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .topbar-nav a.active { background: var(--brand-accent); color: #fff; }
+
+    .page-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .page-hero { text-align: center; margin-bottom: 40px; }
+    .page-hero h1 { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -.5px; }
+    .page-hero h1 em { color: var(--brand-accent); font-style: normal; }
+    .page-hero p { color: var(--brand-muted); font-size: 15px; margin-top: 8px; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-bdr);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-bdr);
+    }
+    .card-icon {
+      width: 36px; height: 36px;
+      background: rgba(234,120,27,.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+    }
+    .card-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .card-subtitle { font-size: 12px; color: var(--brand-muted); }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px; font-weight: 600;
+      color: var(--brand-light);
+      text-transform: uppercase; letter-spacing: .6px;
+    }
+
+    select {
+      width: 100%;
+      background: rgba(5,11,52,.7);
+      border: 1px solid var(--card-bdr);
+      color: #e2e8f0;
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select:focus {
+      border-color: var(--brand-accent);
+      box-shadow: 0 0 0 3px rgba(234,120,27,.18);
+    }
+    select option { background: #050b34; }
+
+    /* Loading skeleton for selects */
+    select.loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .file-zone {
+      border: 2px dashed var(--card-bdr);
+      border-radius: 10px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+      position: relative;
+    }
+    .file-zone:hover, .file-zone.drag-over {
+      border-color: var(--brand-accent);
+      background: rgba(234,120,27,.06);
+    }
+    .file-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+    .file-zone-icon { font-size: 32px; margin-bottom: 8px; }
+    .file-zone-text { color: var(--brand-muted); font-size: 13px; }
+    .file-zone-name {
+      display: none; margin-top: 10px;
+      color: var(--success); font-size: 13px; font-weight: 600;
+      word-break: break-all;
+    }
+
+    .btn-validate {
+      width: 100%; padding: 15px 20px;
+      background: linear-gradient(135deg, #ea781b 0%, #f09030 100%);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700; letter-spacing: .5px;
+      cursor: pointer;
+      transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 20px rgba(234,120,27,.35);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-validate:hover:not(:disabled) {
+      opacity: .93; transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(234,120,27,.5);
+    }
+    .btn-validate:active:not(:disabled) { transform: translateY(0); }
+    .btn-validate:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    .spinner-ring {
+      width: 20px; height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .processing-bar {
+      display: none; margin-top: 16px; padding: 16px 20px;
+      background: rgba(103,134,172,.12);
+      border: 1px solid rgba(103,134,172,.3);
+      border-radius: 10px; text-align: center;
+      color: var(--brand-muted); font-size: 13px;
+      gap: 12px; align-items: center; justify-content: center;
+    }
+    .processing-bar .spinner-ring { display: block; }
+
+    .result-panel { display: none; animation: fadeSlide .35s ease forwards; }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-banner {
+      border-radius: var(--radius); padding: 20px 24px;
+      display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    }
+    .status-banner.pass { background: var(--success-bg); border: 1.5px solid var(--success-bdr); }
+    .status-banner.fail { background: var(--danger-bg);  border: 1.5px solid var(--danger-bdr); }
+    .status-icon { font-size: 36px; flex-shrink: 0; }
+    .status-title { font-size: 20px; font-weight: 800; }
+    .status-banner.pass .status-title { color: var(--success); }
+    .status-banner.fail .status-title { color: var(--danger); }
+    .status-meta { font-size: 12px; color: var(--brand-muted); margin-top: 2px; }
+
+    .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+    .tab-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--card-bdr); border-radius: 7px;
+      background: transparent; color: var(--brand-muted);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all var(--transition);
+    }
+    .tab-btn:hover { color: #fff; border-color: var(--brand-muted); }
+    .tab-btn.active { background: var(--brand-accent); border-color: var(--brand-accent); color: #fff; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeSlide .2s ease forwards; }
+
+    .rule-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .rule-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px; border-radius: 8px; font-size: 13px;
+    }
+    .rule-item.pass { background: rgba(34,200,122,.07); border: 1px solid rgba(34,200,122,.2); }
+    .rule-item.fail { background: rgba(240,78,78,.07);  border: 1px solid rgba(240,78,78,.2); }
+    .rule-badge {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px;
+    }
+    .rule-badge.pass { background: var(--success); color: #fff; }
+    .rule-badge.fail { background: var(--danger);  color: #fff; }
+    .rule-content { flex: 1; }
+    .rule-name { font-weight: 600; color: #e2e8f0; }
+    .rule-desc { color: var(--brand-muted); font-size: 12px; margin-top: 2px; }
+    .rule-type-badge {
+      font-size: 10px; padding: 2px 7px; border-radius: 4px;
+      font-weight: 700; letter-spacing: .4px;
+    }
+    .rule-type-badge.must { background: rgba(103,134,172,.2); color: var(--brand-muted); }
+    .rule-type-badge.or   { background: rgba(245,166,35,.15); color: var(--warn); }
+
+    .ocr-textbox {
+      background: rgba(0,0,0,.35); border: 1px solid var(--card-bdr);
+      border-radius: 8px; padding: 16px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 12px; color: #94a3b8;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 380px; overflow-y: auto; line-height: 1.55;
+    }
+
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 600;
+    }
+    .chip.pass { background: rgba(34,200,122,.12); color: var(--success); border: 1px solid rgba(34,200,122,.3); }
+    .chip.fail { background: rgba(240,78,78,.12);  color: var(--danger);  border: 1px solid rgba(240,78,78,.3); }
+    .chip.warn { background: rgba(245,166,35,.12); color: var(--warn);    border: 1px solid rgba(245,166,35,.3); }
+
+    .btn-reset {
+      padding: 10px 24px; background: transparent;
+      border: 1px solid var(--card-bdr); color: var(--brand-muted);
+      border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 600;
+      transition: all var(--transition); margin-top: 16px;
+    }
+    .btn-reset:hover { border-color: var(--brand-muted); color: #fff; }
+
+    .error-card {
+      display: none;
+      background: var(--danger-bg); border: 1.5px solid var(--danger-bdr);
+      border-radius: var(--radius); padding: 20px 24px;
+      color: var(--danger); font-size: 14px; margin-top: 16px;
+      animation: fadeSlide .3s ease forwards;
+    }
+    .error-card strong { display: block; margin-bottom: 6px; font-size: 15px; }
+
+    /* Config load error notice */
+    .config-notice {
+      display: none;
+      background: rgba(245,166,35,.1); border: 1px solid rgba(245,166,35,.3);
+      border-radius: 8px; padding: 10px 14px;
+      color: var(--warn); font-size: 12px; margin-top: 8px;
+    }
+
+    .page-footer {
+      text-align: center; color: var(--brand-muted); font-size: 12px;
+      margin-top: 48px; padding-top: 24px;
+      border-top: 1px solid var(--card-bdr);
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--card-bdr); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">CC</div>
+    <div>
+      <div class="topbar-name">CCI <span>Global</span></div>
+      <div class="topbar-sub">OCR Document Validator</div>
+    </div>
+  </div>
+  <nav class="topbar-nav">
+    <a href="/ocr-validator" class="active">Validator</a>
+    <a href="/app/ocr-compare">Configure Rules</a>
+    <a href="/app/ocr-validation-log">Audit Log</a>
+  </nav>
+</header>
+
+<main class="page-wrapper">
+
+  <div class="page-hero">
+    <h1>Document <em>Validation</em></h1>
+    <p>Upload a document, select the type, and let OCR extract and validate it against your rules.</p>
+  </div>
+
+  <div class="card" id="upload-card">
+    <div class="card-header">
+      <div class="card-icon">📄</div>
+      <div>
+        <div class="card-title">Document Configuration</div>
+        <div class="card-subtitle">Select document type and country, then upload the file</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="doc-type">Document Type</label>
+        <select id="doc-type">
+          <option value="">— Loading types… —</option>
+        </select>
+        <div class="config-notice" id="config-notice">
+          ⚠ Could not load document types from server. Using defaults.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" disabled>
+          <option value="">— Select country —</option>
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label>Document File</label>
+        <div class="file-zone" id="file-zone"
+             ondragover="onDragOver(event)"
+             ondragleave="onDragLeave(event)"
+             ondrop="onDrop(event)">
+          <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp"
+                 onchange="onFileChange(event)" />
+          <div class="file-zone-icon">📂</div>
+          <div class="file-zone-text">
+            Drag &amp; drop a file here, or <strong style="color:var(--brand-accent)">browse</strong><br>
+            <span style="font-size:11px;opacity:.7">PDF, PNG, JPG, JPEG, TIFF — max 10 MB</span>
+          </div>
+          <div class="file-zone-name" id="file-name-display"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <button class="btn-validate" id="validate-btn" onclick="runValidation()" disabled>
+        <span class="spinner-ring" id="btn-spinner"></span>
+        <span id="btn-label">🔍 Validate Document</span>
+      </button>
+    </div>
+
+    <div class="processing-bar" id="processing-bar">
+      <div class="spinner-ring"></div>
+      <span id="processing-msg">Uploading file…</span>
+    </div>
+
+    <div class="error-card" id="error-card">
+      <strong>⚠ Validation Error</strong>
+      <span id="error-msg"></span>
+    </div>
+  </div>
+
+  <div class="result-panel" id="result-panel">
+
+    <div class="status-banner" id="status-banner">
+      <div class="status-icon" id="status-icon"></div>
+      <div>
+        <div class="status-title" id="status-title"></div>
+        <div class="status-meta" id="status-meta"></div>
+      </div>
+    </div>
+
+    <div class="chip-row" id="chip-row"></div>
+
+    <div class="card" style="margin-top: 20px;">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('rules', this)">Validation Rules</button>
+        <button class="tab-btn" onclick="switchTab('ocr', this)">Extracted Text</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-rules">
+        <ul class="rule-list" id="rule-list"></ul>
+      </div>
+
+      <div class="tab-pane" id="tab-ocr">
+        <div class="ocr-textbox" id="ocr-text-box"></div>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetForm()">↩ Validate Another Document</button>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  CCI Global · OCR Document Validator · Powered by Frappe &amp; Tesseract
+</footer>
+
+<script>
+/* ── STATE ─────────────────────────────────────────────────────────────── */
+let selectedFile = null;
+let configs = [];
+
+/* ── INIT ──────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  loadConfigs();
+  document.getElementById('doc-type').addEventListener('change', onDocTypeChange);
+  document.getElementById('country').addEventListener('change', checkReady);
+});
+
+/* ── CONFIG LOADING (GET request — no CSRF needed for allow_guest) ─────── */
+function loadConfigs() {
+  // Use GET so no CSRF token is required for guest users
+  fetch('/api/method/ocr_validator.api.ocr_validate.get_ocr_configs', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+  })
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(data => {
+      configs = data.message || [];
+      if (!configs.length) throw new Error('Empty config list');
+      populateDocTypes();
+      applyUrlParams();
+    })
+    .catch(err => {
+      console.warn('Config load failed:', err, '— using fallback defaults');
+      // Fallback hardcoded so the portal still works even if DB has no records
+      configs = [
+        { document_type: 'Passport',        countries: [{ country: 'Kenya' }, { country: 'South Africa' }, { country: 'Zimbabwe' }] },
+        { document_type: 'National ID',      countries: [{ country: 'Kenya' }, { country: 'South Africa' }, { country: 'Zimbabwe' }] },
+        { document_type: "Driver's License", countries: [{ country: 'Kenya' }, { country: 'South Africa' }] },
+        { document_type: 'Proof of Address', countries: [{ country: 'Kenya' }, { country: 'South Africa' }] },
+      ];
+      document.getElementById('config-notice').style.display = 'block';
+      populateDocTypes();
+      applyUrlParams();
+    });
+}
+
+function populateDocTypes() {
+  const sel = document.getElementById('doc-type');
+  sel.innerHTML = '<option value="">— Select type —</option>';
+  configs.forEach(cfg => {
+    const opt = document.createElement('option');
+    opt.value = cfg.document_type;
+    opt.textContent = cfg.document_type;
+    sel.appendChild(opt);
+  });
+}
+
+function applyUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const dt = params.get('doc_type');
+  const co = params.get('country');
+  if (dt) {
+    document.getElementById('doc-type').value = dt;
+    onDocTypeChange();
+    if (co) {
+      setTimeout(() => {
+        document.getElementById('country').value = co;
+        checkReady();
+      }, 50);
+    }
+  }
+}
+
+/* ── FORM EVENTS ───────────────────────────────────────────────────────── */
+function onDocTypeChange() {
+  const docType = document.getElementById('doc-type').value;
+  const countrySel = document.getElementById('country');
+  countrySel.innerHTML = '<option value="">— Select country —</option>';
+  countrySel.disabled = true;
+
+  if (!docType) { checkReady(); return; }
+
+  const cfg = configs.find(c => c.document_type === docType);
+  if (cfg && cfg.countries.length) {
+    cfg.countries.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.country;
+      opt.textContent = c.country + (c.description ? ` — ${c.description}` : '');
+      countrySel.appendChild(opt);
+    });
+    countrySel.disabled = false;
+    if (cfg.countries.length === 1) {
+      countrySel.value = cfg.countries[0].country;
+    }
+  }
+  checkReady();
+}
+
+function onFileChange(evt) { setFile(evt.target.files[0]); }
+
+function onDragOver(evt) {
+  evt.preventDefault();
+  document.getElementById('file-zone').classList.add('drag-over');
+}
+function onDragLeave() {
+  document.getElementById('file-zone').classList.remove('drag-over');
+}
+function onDrop(evt) {
+  evt.preventDefault();
+  document.getElementById('file-zone').classList.remove('drag-over');
+  if (evt.dataTransfer.files[0]) setFile(evt.dataTransfer.files[0]);
+}
+
+function setFile(file) {
+  if (!file) return;
+  const allowed = ['pdf','png','jpg','jpeg','tiff','tif','bmp'];
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!allowed.includes(ext)) {
+    showError('File type not supported. Please upload a PDF or image (PNG, JPG, TIFF).');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showError('File exceeds 10 MB limit. Please compress or use a smaller scan.');
+    return;
+  }
+  selectedFile = file;
+  const nameEl = document.getElementById('file-name-display');
+  nameEl.textContent = '✅ ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+  nameEl.style.display = 'block';
+  hideError();
+  checkReady();
+}
+
+function checkReady() {
+  const docType = document.getElementById('doc-type').value;
+  const country = document.getElementById('country').value;
+  document.getElementById('validate-btn').disabled = !(docType && country && selectedFile);
+}
+
+/* ── VALIDATION FLOW ───────────────────────────────────────────────────── */
+function runValidation() {
+  const docType = document.getElementById('doc-type').value;
+  const country = document.getElementById('country').value;
+
+  if (!docType || !country || !selectedFile) {
+    showError('Please fill in all fields and upload a file.');
+    return;
+  }
+
+  setLoading(true, 'Reading file…');
+  hideError();
+  hideResults();
+
+  const reader = new FileReader();
+  reader.onerror = () => { setLoading(false); showError('Could not read the selected file.'); };
+  reader.onload = () => {
+    const b64 = reader.result.split(',')[1];
+    const ext  = selectedFile.name.split('.').pop().toLowerCase();
+    setProcessingMsg('Running OCR extraction… (this may take 10–30 seconds)');
+    const csrf = getCsrfToken();
+    const body = new URLSearchParams({
+      document_type: docType,
+      country:       country,
+      file_b64:      b64,
+      file_ext:      ext,
+    });
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    if (csrf) headers['X-Frappe-CSRF-Token'] = csrf;
+    fetch('/api/method/ocr_validator.api.ocr_validate.validate_ocr_document',
+          { method: 'POST', headers, body })
+      .then(r => r.json())
+      .then(valData => {
+        if (valData.exc) {
+          let msg = valData.exc_type || 'Validation error';
+          try {
+            const srvMsg = JSON.parse(valData._server_messages || '[]');
+            if (srvMsg.length) msg = JSON.parse(srvMsg[0]).message || msg;
+          } catch (_) {}
+          throw new Error(msg);
+        }
+        setLoading(false);
+        renderResults(valData.message);
+      })
+      .catch(err => {
+        setLoading(false);
+        showError(err.message || 'An unexpected error occurred.');
+      });
+  };
+  reader.readAsDataURL(selectedFile);
+}
+
+/* ── RENDER RESULTS ────────────────────────────────────────────────────── */
+function renderResults(r) {
+  const banner = document.getElementById('status-banner');
+  const icon   = document.getElementById('status-icon');
+  const title  = document.getElementById('status-title');
+  const meta   = document.getElementById('status-meta');
+
+  if (r.matched) {
+    banner.className  = 'status-banner pass';
+    icon.textContent  = '✅';
+    title.textContent = 'Document Validated Successfully';
+    meta.textContent  = `${r.document_type} · ${r.country} · ${r.matched_rules.length} rule${r.matched_rules.length !== 1 ? 's' : ''} passed`;
+  } else {
+    banner.className  = 'status-banner fail';
+    icon.textContent  = '❌';
+    title.textContent = 'Validation Failed';
+    const failures    = (r.missing_required || []).length + (r.failed_or_groups || []).length;
+    meta.textContent  = `${r.document_type} · ${r.country} · ${failures} issue${failures !== 1 ? 's' : ''} found`;
+  }
+
+  const chipRow = document.getElementById('chip-row');
+  chipRow.innerHTML = '';
+  if ((r.matched_rules || []).length)    chipRow.innerHTML += chip('pass', `✓ ${r.matched_rules.length} passed`);
+  if ((r.missing_required || []).length) chipRow.innerHTML += chip('fail', `✗ ${r.missing_required.length} missing`);
+  if ((r.failed_or_groups || []).length) chipRow.innerHTML += chip('warn', `⚠ ${r.failed_or_groups.length} OR group${r.failed_or_groups.length !== 1 ? 's' : ''} failed`);
+  if ((r.passed_or_groups || []).length) chipRow.innerHTML += chip('pass', `✓ ${r.passed_or_groups.length} OR group${r.passed_or_groups.length !== 1 ? 's' : ''} passed`);
+
+  const ruleList = document.getElementById('rule-list');
+  ruleList.innerHTML = '';
+
+  if (r.rule_details && r.rule_details.length) {
+    r.rule_details.forEach(rd => {
+      const cls      = rd.passed ? 'pass' : 'fail';
+      const typeLbl  = rd.type === 'must_have' ? 'MUST' : 'OR';
+      const typeCls  = rd.type === 'must_have' ? 'must' : 'or';
+      const candidates = rd.candidates
+        ? `<div class="rule-desc">Options: ${rd.candidates.map(htmlEsc).join(', ')}</div>` : '';
+      const desc = rd.description
+        ? `<div class="rule-desc">${htmlEsc(rd.description)}</div>` : '';
+
+      ruleList.innerHTML += `
+        <li class="rule-item ${cls}">
+          <div class="rule-badge ${cls}">${rd.passed ? '✓' : '✗'}</div>
+          <div class="rule-content">
+            <div class="rule-name">${htmlEsc(rd.rule)}</div>
+            ${desc}${candidates}
+          </div>
+          <span class="rule-type-badge ${typeCls}">${typeLbl}</span>
+        </li>`;
+    });
+  } else {
+    // Fallback: build rule list from summary arrays
+    (r.matched_rules || []).forEach(v => ruleList.innerHTML += ruleItem(v, '', 'must', true));
+    (r.missing_required || []).forEach(v => ruleList.innerHTML += ruleItem(v, '', 'must', false));
+    (r.failed_or_groups || []).forEach(g => ruleList.innerHTML += ruleItem('OR Group: ' + g, '', 'or', false));
+    (r.passed_or_groups || []).forEach(g => ruleList.innerHTML += ruleItem('OR Group: ' + g, '', 'or', true));
+
+    if (ruleList.innerHTML === '') {
+      ruleList.innerHTML = '<li style="color:var(--brand-muted);padding:12px">No rule details returned.</li>';
+    }
+  }
+
+  document.getElementById('ocr-text-box').textContent = r.ocr_text || r.ocr_preview || '(no text extracted)';
+  document.getElementById('result-panel').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 80);
+}
+
+function ruleItem(name, desc, type, passed) {
+  const cls     = passed ? 'pass' : 'fail';
+  const typeLbl = type === 'must' ? 'MUST' : 'OR';
+  const typeCls = type === 'must' ? 'must' : 'or';
+  return `
+    <li class="rule-item ${cls}">
+      <div class="rule-badge ${cls}">${passed ? '✓' : '✗'}</div>
+      <div class="rule-content">
+        <div class="rule-name">${htmlEsc(name)}</div>
+        ${desc ? `<div class="rule-desc">${htmlEsc(desc)}</div>` : ''}
+      </div>
+      <span class="rule-type-badge ${typeCls}">${typeLbl}</span>
+    </li>`;
+}
+
+function chip(type, text) {
+  return `<span class="chip ${type}">${text}</span>`;
+}
+
+/* ── TABS ──────────────────────────────────────────────────────────────── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── UI HELPERS ────────────────────────────────────────────────────────── */
+function setLoading(on, msg) {
+  const btn     = document.getElementById('validate-btn');
+  const spinner = document.getElementById('btn-spinner');
+  const label   = document.getElementById('btn-label');
+  const procBar = document.getElementById('processing-bar');
+  btn.disabled  = on;
+  spinner.style.display = on ? 'block' : 'none';
+  label.textContent     = on ? 'Processing…' : '🔍 Validate Document';
+  procBar.style.display = on ? 'flex' : 'none';
+  if (msg) setProcessingMsg(msg);
+}
+
+function setProcessingMsg(msg) {
+  document.getElementById('processing-msg').textContent = msg;
+}
+
+function showError(msg) {
+  document.getElementById('error-msg').textContent = msg;
+  document.getElementById('error-card').style.display = 'block';
+}
+
+function hideError() {
+  document.getElementById('error-card').style.display = 'none';
+}
+
+function hideResults() {
+  document.getElementById('result-panel').style.display = 'none';
+}
+
+function resetForm() {
+  hideResults();
+  hideError();
+  document.getElementById('doc-type').value = '';
+  document.getElementById('country').innerHTML = '<option value="">— Select country —</option>';
+  document.getElementById('country').disabled = true;
+  document.getElementById('file-input').value = '';
+  document.getElementById('file-name-display').style.display = 'none';
+  selectedFile = null;
+  document.getElementById('validate-btn').disabled = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function htmlEsc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function getCsrfToken() {
+  // Works in Frappe desk context; falls back to cookie
+  if (typeof frappe !== 'undefined' && frappe.csrf_token) return frappe.csrf_token;
+  const match = document.cookie.match(/csrftoken=([^;]+)/);
+  return match ? match[1] : '';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+ "actions": [],
+ "autoname": "format:{document_type}-{country}",
+ "creation": "2026-01-01 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["document_type","country","description","enabled","section_must","must_have_table","section_or","or_table"],
+ "fields": [
+  {"fieldname":"document_type","fieldtype":"Data","label":"Document Type","reqd":1,"in_list_view":1},
+  {"fieldname":"country","fieldtype":"Data","label":"Country","reqd":1,"in_list_view":1},
+  {"fieldname":"description","fieldtype":"Small Text","label":"Description"},
+  {"fieldname":"enabled","fieldtype":"Check","label":"Enabled","default":"1","in_list_view":1},
+  {"fieldname":"section_must","fieldtype":"Section Break","label":"Must Have Rules"},
+  {"fieldname":"must_have_table","fieldtype":"Table","label":"Must Have Rules","options":"OCR Compare Must Have"},
+  {"fieldname":"section_or","fieldtype":"Section Break","label":"OR Rules"},
+  {"fieldname":"or_table","fieldtype":"Table","label":"OR Rules","options":"OCR Compare OR Rule"}
+ ],
+ "links": [],
+ "modified": "2026-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Ocr Validator",
+ "name": "OCR Compare",
+ "owner": "Administrator",
+ "permissions": [
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"System Manager","share":1,"write":1},
+  {"create":1,"delete":0,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"All","share":1,"write":1}
+ ],
+ "title_field": "document_type"
+}

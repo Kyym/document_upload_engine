@@ -5,6 +5,9 @@ app_description = "CCI Global OCR Document Validation Framework"
 app_email = "kevin.mwaura@ccikenya.co.ke"
 app_license = "mit"
 
+# Fixture data – loaded via `bench import-fixtures`
+fixtures = ["OCR Compare"]
+
 # Apps
 # ------------------
 
@@ -194,6 +197,16 @@ app_license = "mit"
 # 	"Task": "ocr_validator.task.get_dashboard_data"
 # }
 
+# App screen shortcut (Frappe v15+)
+add_to_apps_screen = [
+	{
+		"name": "ocr_validator",
+		"logo": "/assets/ocr_validator/images/logo.png",
+		"title": "OCR Validator",
+		"route": "/ocr-validator",
+	}
+]
+
 # exempt linked doctypes from being automatically cancelled
 #
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]
@@ -256,3 +269,5 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+# Website Routes
+website_route_rules = [{"from_route": "/ocr-test", "to_route": "ocr_test"}]
